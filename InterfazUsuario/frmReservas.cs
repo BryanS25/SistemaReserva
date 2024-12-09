@@ -103,28 +103,6 @@ namespace frmSistemaReserva.InterfazUsuario
             }
         }
 
-        /*
-        private void CargarListaNumeroHabitacion()
-        {
-            //Reserva listaNumero = new Reserva();
-            cboNumeroHabitacion.DataSource = conexion.ListarNumeroHabitaciones();
-            cboNumeroHabitacion.ValueMember = "IdHabitacion";
-            cboNumeroHabitacion.DisplayMember = "numeroHabitacion";
-
-            // Si deseas llenar el nombre completo en un TextBox al seleccionar un cliente
-            cboNumeroHabitacion.SelectedIndexChanged += (sender, e) =>
-            {
-                if (cboNumeroHabitacion.SelectedIndex >= 0)
-                {
-                    DataRowView row = (DataRowView)cboNumeroHabitacion.SelectedItem;
-                    txtTipoHabitacion.Text = row["tipo"].ToString();
-                    // Almacena el precio por noche en el control (puede ser en el Tag).
-                    txtTipoHabitacion.Tag = row["precioPorNoche"]; // Guarda el precio en el Tag.
-
-                }
-            };
-        }*/
-
         private void CargarHabitacionesEnListBox()
         {
             try
@@ -279,63 +257,6 @@ namespace frmSistemaReserva.InterfazUsuario
             }
         }
 
-
-        /*
-        private void btnGuardarReserva_Click(object sender, EventArgs e)
-        {
-            // Crear un nuevo usuario con los datos ingresados en el formulario
-            Reserva nuevaReserva = new Reserva()
-            {
-                IdCliente = Convert.ToInt32(cboDuiClientes.SelectedValue),
-                Cliente = txtNombreCliente.Text.Trim(),
-                IdHabitacion = Convert.ToInt32(cboNumeroHabitacion.SelectedValue),
-                Habitacion = txtTipoHabitacion.Text.Trim(),
-                IdUsuario = idUsuario,
-                FechaInicio = dtpFechaInicioReserva.Value,
-                FechaFin = dtpFechaFinReserva.Value,
-            }; 
-
-            // Validación de campos vacíos
-            if (cboDuiClientes.SelectedValue == null || cboNumeroHabitacion.SelectedValue == null ||
-                string.IsNullOrEmpty(nuevaReserva.Cliente) || string.IsNullOrEmpty(nuevaReserva.Habitacion))
-            {
-                MessageBox.Show("Por favor, complete todos los campos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (dtpFechaInicioReserva.Value.Date >= dtpFechaFinReserva.Value.Date)
-            {
-                MessageBox.Show("La fecha de inicio no puede ser posterior o igual a la fecha de fin.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            try
-            {
-                Conexion dbHelper = new Conexion();
-                dbHelper.InsertarReservaConSP(nuevaReserva);
-                MessageBox.Show("Reserva agregada exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // Refrescar lista y limpiar campos
-                CargarListaNumeroHabitacion();
-                DesactivarBotones();
-                CargarReservas();
-            }
-            catch (SqlException ex)
-            {
-                if (ex.Number == 50001 || ex.Number == 50003)
-                {
-                    MessageBox.Show("La reserva contiene datos que no existen.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    MessageBox.Show("Error al guardar reserva: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al guardar reserva: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }*/
-
         private void btnEliminarReserva_Click(object sender, EventArgs e)
         {
             if (dgvReservas.CurrentRow != null)
@@ -352,7 +273,7 @@ namespace frmSistemaReserva.InterfazUsuario
                     try
                     {
                         conexion.EliminarReservaConSP(idReserva);
-                        MessageBox.Show("Usuario eliminado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Reserva eliminada exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         DesactivarBotones();
                         CargarReservas();
@@ -455,10 +376,10 @@ namespace frmSistemaReserva.InterfazUsuario
         {
             if (dgvReservas.CurrentRow != null)
             {
-                // Obtener el Id del usuario seleccionado
+                // Obtener el Id de reserva seleccionado
                 int idReserva = Convert.ToInt32(dgvReservas.CurrentRow.Cells["IdReserva"].Value);
 
-                // Crear un usuario con los datos modificados
+                // Crear reserva con los datos modificados
                 Reserva reservaModificada = new Reserva()
                 {
                     IdReserva = idReserva,
@@ -481,7 +402,7 @@ namespace frmSistemaReserva.InterfazUsuario
                     return;
                 }
 
-                // Llamar al método para actualizar el usuario en la base de datos
+                // Llamar al método para actualizar reserva en la base de datos
                 Conexion dbHelper = new Conexion();
                 try
                 {
@@ -494,11 +415,11 @@ namespace frmSistemaReserva.InterfazUsuario
                 }
                 catch (SqlException ex)
                 {
-                    if (ex.Number == 50002) // Código del error lanzado en caso de nombre de usuario duplicado
+                    if (ex.Number == 50002) // Código del error lanzado en caso reserva duplicado
                     {
                         MessageBox.Show("La habitación seleccionada no está disponible.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    else if (ex.Number == 50001) // Código del error lanzado si el usuario no existe
+                    else if (ex.Number == 50001) // Código del error lanzado si la reserva no existe
                     {
                         MessageBox.Show("El cliente no existe. Por favor, verifique los datos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
