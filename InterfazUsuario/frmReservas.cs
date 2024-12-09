@@ -444,7 +444,6 @@ namespace frmSistemaReserva.InterfazUsuario
                     //txtTipoHabitacion.Text = row.Cells["tipoHabitación"].Value.ToString();
                     dtpFechaInicioReserva.Value = Convert.ToDateTime(row.Cells["FechaInicio"].Value);
                     dtpFechaFinReserva.Value = Convert.ToDateTime(row.Cells["FechaFin"].Value);
-
                     
                     btnEditarReserva.Visible = true;
                 }
