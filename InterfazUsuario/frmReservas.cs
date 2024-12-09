@@ -518,5 +518,40 @@ namespace frmSistemaReserva.InterfazUsuario
                 MessageBox.Show("Seleccione una reserva para modificar.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
+        private void btnBuscarReserva_Click(object sender, EventArgs e)
+        {
+            string criterio = txtBuscarReserva.Text.Trim().ToLower();
+            if (string.IsNullOrEmpty(criterio))
+            {
+                CargarReservas(); // Mostrar todos si no se proporciona criterio de búsqueda
+            }
+            else
+            {
+                List<viewReserva> reservas = conexion.ObtenerReservas();
+
+                // Filtrar la lista de reservas basada en el criterio
+                var reservaFiltrada = reservas.Where(u =>
+                    u.Cliente.ToLower().Contains(criterio) ||
+                    u.Dui.ToLower().Contains(criterio) ||
+                    u.tipoHabitación.ToLower().Contains(criterio) ||
+                    u.Habitacion.ToString().ToLower().Contains(criterio) ||
+                    u.precioPorNoche.ToString().ToLower().Contains(criterio) ||
+                    u.tipoDivisa.ToString().ToLower().Contains(criterio)).ToList();
+                     
+                if (reservaFiltrada.Any())
+                {
+                // Asignar los resultados filtrados al DataGridView
+                dgvReservas.DataSource = reservaFiltrada.ToList();
+                }
+                else
+                {
+                MessageBox.Show("No hay resultados con su búsqueda.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                txtBuscarReserva.Text = "";
+                CargarReservas();
+                }
+                dgvReservas.Refresh();
+        }
     }
+}
 }
